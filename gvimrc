@@ -1,5 +1,8 @@
-color vwilight
-set guifont=Menlo\ Regular:h14
+syntax enable
+set background=dark
+colorscheme solarized
+
+set guifont=Menlo\ Regular:h12
 set linespace=2
 set antialias
 
