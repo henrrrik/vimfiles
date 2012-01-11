@@ -88,6 +88,13 @@ endif
 " provide some context when editing
 set scrolloff=3
 
+" Line numbers
+set number
+
+" use :w!! to write to a file using sudo if you forgot to 'sudo vim file'
+" (it will prompt for sudo password when writing)
+cmap w!! %!sudo tee > /dev/null %
+
 " don't use Ex mode, use Q for formatting
 map Q gq
 
