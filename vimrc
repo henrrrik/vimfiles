@@ -17,7 +17,6 @@ syntax enable
 set background=dark
 colorscheme solarized
 
-
 if has("autocmd")
   " Drupal *.module and *.install files.
   augroup module
