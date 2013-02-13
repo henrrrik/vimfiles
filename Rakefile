@@ -35,9 +35,6 @@ task :tmp_dirs do
   mkdir_p "_temp"
 end
 
-<<<<<<< HEAD
-
-=======
 task :macvim_check do
   if mvim = which('mvim') and '/usr/bin/vim' == which('vim')
     warn color('Warning:', 31) + " You have MacVim installed, but `vim` still opens system Vim."
