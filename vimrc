@@ -7,8 +7,8 @@
 ""
 
 set nocompatible
-syntax enable
 set encoding=utf-8
+set exrc                    " load vimrc from current directory
 
 call pathogen#infect()
 filetype plugin indent on
@@ -30,14 +30,24 @@ if has("autocmd")
   augroup END
 endif
 
-set nonumber
+runtime macros/matchit.vim  " enables % to cycle through `if/else/endif`
+
+set nonumber    " line numbers aren't needed
+>>>>>>> 5beabc656a2ec39a3151400d210b2179f9adf0ac
 set ruler       " show the cursor position all the time
-set cursorline
-set showcmd     " display incomplete commands
+set cursorline  " highlight the line of the cursor
+set showcmd     " show partial commands below the status line
+set shell=bash  " avoids munging PATH under zsh
+let g:is_bash=1 " default shell syntax
+set history=200 " remember more Ex commands
+set scrolloff=3 " have some context around the current line always on screen
 
 " Allow backgrounding buffers without writing them, and remember marks/undo
 " for backgrounded buffers
 set hidden
+
+" Auto-reload buffers when file changed on disk
+set autoread
 
 "" Whitespace
 set nowrap                        " don't wrap lines
@@ -52,8 +62,8 @@ set listchars=tab:\ \             " a tab should display as "  ", trailing white
 set listchars+=trail:.            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
-set listchars+=precedes:<         " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
+set listchars+=precedes:<         " The character to show in the first column when wrap is
+                                  " off and the line continues beyond the left of the screen
 "" Searching
 set hlsearch                      " highlight matches
 set incsearch                     " incremental searching
@@ -63,14 +73,14 @@ set smartcase                     " ... unless they contain at least one capital
 function s:setupWrapping()
   set wrap
   set wrapmargin=2
-  set textwidth=72
+  set textwidth=80
 endfunction
 
 if has("autocmd")
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make set noexpandtab
 
-  " Make sure all mardown files have the correct filetype set and setup wrapping
+  " Make sure all markdown files have the correct filetype set and setup wrapping
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
 
   " Treat JSON files like JavaScript
@@ -83,10 +93,10 @@ if has("autocmd")
   " see :help last-position-jump
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
-endif
 
-" provide some context when editing
-set scrolloff=3
+  " mark Jekyll YAML frontmatter as comment
+  au BufNewFile,BufRead *.{md,markdown,html,xml} sy match Comment /\%^---\_.\{-}---$/
+endif
 
 " Line numbers
 set number
@@ -101,12 +111,42 @@ map Q gq
 " clear the search buffer when hitting return
 :nnoremap <CR> :nohlsearch<cr>
 
+" toggle the current fold
+:nnoremap <Space> za
+
 let mapleader=","
 
+<<<<<<< HEAD
 map <leader>gg :topleft 100 :split Gemfile<cr>
 map <leader>f :CtrlP<cr>
 " http://vimcasts.org/e/14
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
+=======
+" paste lines from unnamed register and fix indentation
+nmap <leader>p pV`]=
+nmap <leader>P PV`]=
+
+" http://vimcasts.org/e/14
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+
+map <C-P> :CtrlP %%<cr>
+map <leader>b :CtrlPBuffer<cr>
+let g:ctrlp_root_markers = ['.git', 'tags']
+" let g:ctrlp_extensions = ['tag', 'buffertag']
+
+let g:turbux_command_test_unit = 'ruby -Ilib:test'
+" let g:turbux_command_cucumber = 'cucumber -f progress'
+
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+" In command-line mode, C-a jumps to beginning (to match C-e)
+cnoremap <C-a> <Home>
+
+" ignore Rubinius, Sass cache files
+set wildignore+=tmp/**,*.rbc,.rbx,*.scssc,*.sassc
+" ignore Bundler standalone/vendor installs & gems
+set wildignore+=bundle/**,vendor/bundle/**,vendor/cache/**
+>>>>>>> 5beabc656a2ec39a3151400d210b2179f9adf0ac
 
 nnoremap <leader><leader> <c-^>
 
@@ -114,6 +154,9 @@ nnoremap <leader><leader> <c-^>
 nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
 command! KillWhitespace :normal :%s/ *$//g<cr><c-o><cr>
+
+set splitright
+set splitbelow
 
 " easier navigation between split windows
 nnoremap <c-j> <c-w>j
@@ -145,5 +188,3 @@ if has("statusline") && !&cp
   set statusline+=Buf:#%n
   set statusline+=[%b][0x%B]
 endif
-
-let g:CommandTMaxHeight=10

@@ -3,7 +3,7 @@
 	url = https://github.com/tpope/vim-fugitive
 [submodule "bundle/haml"]
 	path = bundle/haml
-	url = https://github.com/tpope/vim-haml
+	url = https://github.com/chriseppstein/vim-haml
 [submodule "bundle/javascript"]
 	path = bundle/javascript
 	url = https://github.com/pangloss/vim-javascript
@@ -16,9 +16,6 @@
 [submodule "bundle/ruby"]
 	path = bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby
-[submodule "bundle/scss"]
-	path = bundle/scss
-	url = https://github.com/cakebaker/scss-syntax.vim
 [submodule "bundle/ack"]
 	path = bundle/ack
 	url = https://github.com/mileszs/ack.vim
@@ -34,9 +31,6 @@
 [submodule "bundle/molokai"]
 	path = bundle/molokai
 	url = https://github.com/mrtazz/molokai.vim
-[submodule "bundle/vim-haml"]
-	path = bundle/vim-haml
-	url = https://github.com/chriseppstein/vim-haml.git
 [submodule "bundle/vim-colors-solarized"]
 	path = bundle/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
@@ -61,3 +55,33 @@
 [submodule "bundle/vim-less"]
 	path = bundle/vim-less
 	url = https://github.com/groenewege/vim-less.git
+[submodule "bundle/tabular"]
+	path = bundle/tabular
+	url = https://github.com/godlygeek/tabular
+[submodule "bundle/surround"]
+	path = bundle/surround
+	url = https://github.com/tpope/vim-surround
+[submodule "bundle/repeat"]
+	path = bundle/repeat
+	url = https://github.com/tpope/vim-repeat
+[submodule "bundle/liquid"]
+	path = bundle/liquid
+	url = https://github.com/tpope/vim-liquid
+[submodule "bundle/markdown-folding"]
+	path = bundle/markdown-folding
+	url = https://github.com/nelstrom/vim-markdown-folding
+[submodule "bundle/eunuch"]
+	path = bundle/eunuch
+	url = https://github.com/tpope/vim-eunuch
+[submodule "bundle/vimux"]
+	path = bundle/vimux
+	url = https://github.com/benmills/vimux
+[submodule "bundle/turbux"]
+	path = bundle/turbux
+	url = https://github.com/jgdavey/vim-turbux
+[submodule "bundle/ctrlp"]
+	path = bundle/ctrlp
+	url = https://github.com/kien/ctrlp.vim
+[submodule "bundle/scriptease"]
+	path = bundle/scriptease
+	url = https://github.com/tpope/vim-scriptease
