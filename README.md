@@ -31,13 +31,13 @@ files inside the ".vim" directory.
 
 * 2 spaces, no tabs
 * incremental, case-insensitive search
+* vertical split goes right, horizontal split goes below
+* cursor keys for movement are disabled!
+
 * `<CR>` - remove highlighting after search
 * `<Space>` - toggle current fold
-* vertical split goes right, horizontal split goes below
 * `<C-j/k/h/l>` - switch between splits (no need to prepend `<C-w>`)
-* cursor keys for movement are disabled!
 * `Q` - format lines
-* `,cf` - search for merge conflicts in buffer
 * `:KillWhitespace` - strip trailing whitespace
 
 ### File switching (CtrlP)
@@ -75,6 +75,13 @@ In the quickfix window:
 * `h` (`H`) - open in horizontal split (silently)
 * `v` (`gv`) - open in vertical split (silently)
 
+In the normal buffer:
+
+* `:cn[ext]`/`:cN/:cp[revious]` - jump to the next/previous match
+* `]q`/`[q` - same as above, with Unimpaired
+* `:ccl` - close the quickfix window
+* `:col[der]`/`:cnew[er]` - show results of previous/next search
+
 ### Surround
 
 * `cs"'` - change string from double to single quotes
@@ -95,10 +102,10 @@ Surround + rails.vim:
 
 ### Commentary
 
-* `\\{motion}` - comment/uncomment lines that {motion} moves over
-* `\\\` - comment/uncomment [count] lines
-* `{Visual}\\` - comment/uncomment the highlighted lines
-* `\\u` - uncomment the current and adjacent commented lines
+* `gc{motion}` - comment/uncomment lines that {motion} moves over
+* `gcc` - comment/uncomment [count] lines
+* `{Visual}gc` - comment/uncomment the highlighted lines
+* `gcu` - uncomment the current and adjacent commented lines
 
 ### ruby.vim
 
@@ -141,18 +148,66 @@ In visual mode:
 * `:Gcommit`
 * `:Gstatus`
   * jump between lines that represent files with `<c-n>`, `<c-p>`
-  * `-` - add/reset file (visual mode too)
+  * `-` - add/reset file (also in visual mode)
   * `<Enter>` - open current file in the window below
-  * `p` - run `git add --patch` for current file
-  * `C` - invoke `:Gcommit`
+  * `o`/`S` - `:Gsplit`/`:Gvsplit`
+  * `p` - add/reset current file with `--patch`
+  * `D` - `:Gdiff`
+  * `c[v]c` - `:Gcommit [--verbose]`
+  * `ca`/`cA` - `--append` / reuse message
 * `:[range]Gbrowse! -` - copy GitHub URL for code that's currently selected
 * `:[range]Gblame`
+  * `q`/`gq` - close blame and return to blamed window / work tree version
+  * `<CR>` - q, then open commit
+  * `o`/`O` - open commit in horizontal split / new tab
+  * `-` - reblame at commit
+  * `P` - reblame at parent commit
 
 * `:Gedit feature:%` - version of the current file in the "feature" branch
 * `:Gwrite` - `add %`
-* `:Gread` - `checkout %`
+* `:Gread` - `checkout %` (also the bailout command after browsing git objects)
 * `:Gremove` - `rm %`
 * `:Gmove <dest>` - `mv % <dest>`
+
+* `:Glog` - load past versions of current file into the quickfix list
+* `:Glog --` - load all commits into the quickfix list
+* `:Glog -- %` - load only commits that touch the current file
+* `:Glog --grep={text} --` - only commits that have "text" in the message
+* `:Glog -S{text} --` - only commits that have "text" in the diff
+* `:Ggrep {pattern} [branch]`
+
+In git objects:
+
+* `<Enter>` - jump to revision under cursor
+* `o`/`S`/`O` - jump to revision in a new split / vertical split / tab
+
+In vimdiff view:
+
+* `[c`/`]c` - previous/next changeset
+* `:dp`/`:do` - `:diffput`/`:diffget` - stage/checkout hunk
+* `:Gwrite`/`:Gread` - stage/checkout file
+* `:do //2`/`:do //3` - resolve conflict using the version from target/merge branch
+* `:diffu[pdate]` - refresh diff highlighting
+* `:on[ly]`,`<C-w>o` - close windows other than the current one
+
+### Unimpaired
+
+* `[a`/`]a` - `:previous`/`:next`
+* `[A`/`]A` - `:first`/`:last`
+* `[q`/`]q` - `:cprev`/`:cnext`
+* `[Q`/`]Q` - `:cfirst`/`:clast`
+
+* `[n`/`]n` - previous/next conflict marker
+* `[<Space>`/`]<Space>` - add blank lines above/below the cursor
+
+* `[o{opt}`/`]o{opt}`/`co{opt}` - turn on/turn off/toggle option:
+  * `h` - "hlsearch"
+  * `i` - "ignorecase"
+  * `s` - "spell"
+  * `w` - "wrap"
+
+* `yp/P/o/O/I/A` enters insert mode as with `a/i/o/O/I/A` and sets `paste`.
+  Leaving insert mode sets 'nopaste' automatically.
 
 ### Eunuch
 
@@ -163,17 +218,26 @@ In visual mode:
 * when you create a file that starts with a shebang, it gets `chmod +x`
   automatically on first save!
 
-### Pathogen
+### Scriptease
 
-Quickly open vim runtime files:
-
-* `:Vedit`
-* `:Vsplit`
-* `:Vvsplit`
-* `:Vtabedit`
-* `:Vpedit`
-* `:Vread`
+* `:Vedit` - quickly open a Vim runtime file
+  * `:Vsplit`
+  * `:Vvsplit`
+  * `:Vtabedit`
+  * `:Vpedit`
+  * `:Vread`
+* `:Runtime` - reload runtime files
+* `g!` - eval a motion or selection as VimL and replace it with the result
 
 Example:
 
     :Vsp s/pd<Tab>
+
+### Tbone
+
+* `:Tmux [args]` - execute a tmux command
+* `:[range]Tyank/:Tput [buffer]` - access to tmux buffer
+* `:[range]Twrite [pane]` - `tmux send-keys` to another pane
+
+Examples how to specify a pane: windowtitle.2, top-right, or last; or let it
+default to the previously given argument.

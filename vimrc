@@ -30,9 +30,10 @@ if has("autocmd")
 endif
 
 runtime macros/matchit.vim  " enables % to cycle through `if/else/endif`
+color railscasts
+set synmaxcol=800           " don't try to highlight long lines
 
 set nonumber    " line numbers aren't needed
->>>>>>> 5beabc656a2ec39a3151400d210b2179f9adf0ac
 set ruler       " show the cursor position all the time
 set cursorline  " highlight the line of the cursor
 set showcmd     " show partial commands below the status line
@@ -48,6 +49,12 @@ set hidden
 " Auto-reload buffers when file changed on disk
 set autoread
 
+" Disable swap files; systems don't crash that often these days
+set updatecount=0
+
+" Make Vim able to edit crontab files again.
+set backupskip=/tmp/*,/private/tmp/*"
+
 "" Whitespace
 set nowrap                        " don't wrap lines
 set tabstop=2                     " a tab is two spaces
@@ -55,19 +62,27 @@ set shiftwidth=2                  " an autoindent (with <<) is two spaces
 set expandtab                     " use spaces, not tabs
 set list                          " Show invisible characters
 set backspace=indent,eol,start    " backspace through everything in insert mode
-" List chars
-set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
-set listchars+=trail:.            " show trailing spaces as dots
-set listchars+=extends:>          " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
-set listchars+=precedes:<         " The character to show in the first column when wrap is
-                                  " off and the line continues beyond the left of the screen
+" Joining lines
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j            " Delete comment char when joining commented lines
+endif
+set nojoinspaces                  " Use only 1 space after "." when joining lines, not 2
+" Indicator chars
+set listchars=tab:▸\ ,trail:•,extends:❯,precedes:❮
+set showbreak=↪\ 
+
 "" Searching
 set hlsearch                      " highlight matches
 set incsearch                     " incremental searching
 set ignorecase                    " searches are case insensitive...
 set smartcase                     " ... unless they contain at least one capital letter
+set gdefault                      " have :s///g flag by default on
+
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+set notimeout
+set ttimeout
+set ttimeoutlen=100
 
 function s:setupWrapping()
   set wrap
@@ -76,6 +91,10 @@ function s:setupWrapping()
 endfunction
 
 if has("autocmd")
+  " Avoid showing trailing whitespace when in insert mode
+  au InsertEnter * :set listchars-=trail:•
+  au InsertLeave * :set listchars+=trail:•
+
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make set noexpandtab
 
@@ -84,6 +103,9 @@ if has("autocmd")
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=javascript
+
+  " https://github.com/sstephenson/bats
+  au BufNewFile,BufRead *.bats set ft=sh
 
   " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
   au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
@@ -95,6 +117,13 @@ if has("autocmd")
 
   " mark Jekyll YAML frontmatter as comment
   au BufNewFile,BufRead *.{md,markdown,html,xml} sy match Comment /\%^---\_.\{-}---$/
+
+  " magic markers: enable using `H/S/J/C to jump back to
+  " last HTML, stylesheet, JS or Ruby code buffer
+  au BufLeave *.{erb,html}      exe "normal! mH"
+  au BufLeave *.{css,scss,sass} exe "normal! mS"
+  au BufLeave *.{js,coffee}     exe "normal! mJ"
+  au BufLeave *.{rb}            exe "normal! mC"
 endif
 
 " Line numbers
@@ -115,7 +144,6 @@ map Q gq
 
 let mapleader=","
 
-<<<<<<< HEAD
 map <leader>gg :topleft 100 :split Gemfile<cr>
 map <leader>f :CtrlP<cr>
 " http://vimcasts.org/e/14
@@ -128,9 +156,10 @@ nmap <leader>P PV`]=
 " http://vimcasts.org/e/14
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
-map <C-P> :CtrlP %%<cr>
+map <leader>F :CtrlP %%<cr>
 map <leader>b :CtrlPBuffer<cr>
-let g:ctrlp_root_markers = ['.git', 'tags']
+" let g:ctrlp_root_markers = ['.git', 'Rakefile']
+let g:ctrlp_working_path_mode = 0
 " let g:ctrlp_extensions = ['tag', 'buffertag']
 
 let g:turbux_command_test_unit = 'ruby -Ilib:test'
@@ -145,23 +174,15 @@ cnoremap <C-a> <Home>
 set wildignore+=tmp/**,*.rbc,.rbx,*.scssc,*.sassc
 " ignore Bundler standalone/vendor installs & gems
 set wildignore+=bundle/**,vendor/bundle/**,vendor/cache/**
->>>>>>> 5beabc656a2ec39a3151400d210b2179f9adf0ac
+set wildignore+=node_modules/**
 
+" toggle between last open buffers
 nnoremap <leader><leader> <c-^>
-
-" find merge conflict markers
-nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
 command! KillWhitespace :normal :%s/ *$//g<cr><c-o><cr>
 
 set splitright
 set splitbelow
-
-" easier navigation between split windows
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
 
 " disable cursor keys in normal mode
 map <Left>  :echo "no!"<cr>
@@ -169,21 +190,10 @@ map <Right> :echo "no!"<cr>
 map <Up>    :echo "no!"<cr>
 map <Down>  :echo "no!"<cr>
 
-set backupdir=~/.vim/_backup    " where to put backup files.
-set directory=~/.vim/_temp      " where to put swap files.
-
 if has("statusline") && !&cp
-  set laststatus=2  " always show the status bar
-
-  " Start the status line
-  set statusline=%f\ %m\ %r
-
-  " Add fugitive
+  set laststatus=2              " always show the status bar
+  set statusline=%f\ %m\ %r     " filename, modified, readonly
   set statusline+=%{fugitive#statusline()}
-
-  " Finish the statusline
-  set statusline+=Line:%l/%L[%p%%]
-  set statusline+=Col:%v
-  set statusline+=Buf:#%n
-  set statusline+=[%b][0x%B]
+  set statusline+=\ %l/%L[%p%%] " current line/total lines
+  set statusline+=\ %v[0x%B]    " current column [hex char]
 endif
