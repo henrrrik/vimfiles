@@ -10,9 +10,6 @@
 [submodule "bundle/markdown"]
 	path = bundle/markdown
 	url = https://github.com/tpope/vim-markdown
-[submodule "bundle/rails"]
-	path = bundle/rails
-	url = https://github.com/tpope/vim-rails
 [submodule "bundle/ruby"]
 	path = bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby
@@ -37,9 +34,6 @@
 [submodule "bundle/syntastic"]
 	path = bundle/syntastic
 	url = https://github.com/scrooloose/syntastic.git
-[submodule "bundle/vim-snipmate"]
-	path = bundle/vim-snipmate
-	url = https://github.com/garbas/vim-snipmate.git
 [submodule "bundle/snipmate-snippets"]
 	path = bundle/snipmate-snippets
 	url = https://github.com/honza/snipmate-snippets.git
@@ -97,3 +91,12 @@
 [submodule "bundle/ctrlp.vim"]
 	path = bundle/ctrlp.vim
 	url = https://github.com/kien/ctrlp.vim
+[submodule "bundle/vim-rails"]
+	path = bundle/vim-rails
+	url = git://github.com/tpope/vim-rails.git
+[submodule "bundle/vim-bundler"]
+	path = bundle/vim-bundler
+	url = git://github.com/tpope/vim-bundler.git
+[submodule "bundle/vim-snipmate"]
+	path = bundle/vim-snipmate
+	url = https://github.com/garbas/vim-snipmate.git
